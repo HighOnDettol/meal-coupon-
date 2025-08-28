@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sishu Mangal Parsat - Receipt Generator</title>
+    <!-- html2canvas library for generating images -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* General Body and Container Styling */
@@ -106,7 +107,7 @@
             line-height: 1.4;
             position: relative;
         }
-        #receipt-template h2 {
+        #receipt-template .receipt-header-text {
             text-align: center;
             margin: 0 0 5px;
             font-size: 1.5em;
@@ -182,13 +183,13 @@
             <p>Golden Jubilee Celebration</p>
         </div>
         
-        <h2>Meal Coupon Receipt Generator</h2>
+        <h2>Meal Receipt Generator</h2>
         <p>Fill in the details below to generate and print a receipt or get a digital copy.</p>
 
         <form id="input-form">
             <div class="form-group">
-                <label for="school-name">School Name:</label>
-                <input type="text" id="school-name" required>
+                <label for="payer-name">Payer Name:</label>
+                <input type="text" id="payer-name" required>
             </div>
             <div class="form-group">
                 <label for="mobile-no">Mobile Number:</label>
@@ -215,12 +216,13 @@
     </div>
 
     <div id="receipt-template" style="position: absolute; left: -9999px; top: -9999px;">
-        <h2>Sishu Mangal Parsat</h2>
-        <h3>Golden Jubilee Receipt</h3>
+        <h2 class="receipt-header-text">Golden Jubilee</h2>
+        <h3 class="receipt-header-text">Sishu Mangal Parsat</h3>
+        <h3 class="receipt-header-text">Meal Receipt</h3>
         <div class="divider"></div>
         <div class="receipt-info">
             <p><strong>Date:</strong> <span id="receipt-date"></span></p>
-            <p><strong>Received From:</strong> <span class="receipt-data" data-field="school-name"></span></p>
+            <p><strong>Received From:</strong> <span class="receipt-data" data-field="payer-name"></span></p>
             <p><strong>Mobile No:</strong> <span class="receipt-data" data-field="mobile-no"></span></p>
             <div class="divider"></div>
             <p><strong>Amount:</strong> <span class="receipt-data" data-field="amount-received"></span> INR</p>
@@ -240,7 +242,7 @@
     
     <script>
         const formInputs = {
-            'school-name': document.getElementById('school-name'),
+            'payer-name': document.getElementById('payer-name'),
             'mobile-no': document.getElementById('mobile-no'),
             'amount-received': document.getElementById('amount-received'),
             'student-count': document.getElementById('student-count'),
