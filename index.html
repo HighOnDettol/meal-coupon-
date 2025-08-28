@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sishu Mangal Parsat - Receipt Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* General Body and Container Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Header and Golden Jubilee Styling */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #ffcc00;
+            padding-bottom: 10px;
+        }
+        .header h1 {
+            color: #004d99;
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .header p {
+            margin: 5px 0 0;
+            color: #e6b800;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* Input Form Styling */
+        #input-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            flex-grow: 1;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #generate-image-btn {
+            background-color: #25d366;
+        }
+        #generate-image-btn:hover {
+            background-color: #128c7e;
+        }
+
+        /* The Receipt Template (for image generation) */
+        #receipt-template {
+            display: block;
+            width: 350px;
+            min-height: 450px;
+            margin: 0 auto;
+            border: 2px dashed #000;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.4;
+            position: relative;
+        }
+        #receipt-template h2 {
+            text-align: center;
+            margin: 0 0 5px;
+            font-size: 1.5em;
+        }
+        #receipt-template h3 {
+            text-align: center;
+            margin: 0 0 10px;
+            font-size: 1.1em;
+        }
+        #receipt-template .divider {
+            border-top: 1px dashed #000;
+            margin: 10px 0;
+        }
+        .receipt-info p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        .receipt-info strong {
+            display: inline-block;
+            width: 120px;
+        }
+        .receipt-total {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 15px;
+        }
+
+        /* Placeholder for the generated image */
+        #generated-image-display {
+            display: none;
+            margin-top: 30px;
+            text-align: center;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        #generated-image-display img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #000;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        #copy-instructions {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        /* Print-specific styles */
+        @media print {
+            body { background-color: white; }
+            .container, .no-print, #generated-image-display { display: none; }
+            #receipt-template {
+                display: block;
+                width: 8cm;
+                min-height: 15cm;
+                border: 1px solid #000;
+                box-shadow: none;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container no-print">
+        <div class="header">
+            <h1>Sishu Mangal Parsat</h1>
+            <p>Golden Jubilee Celebration</p>
+        </div>
+        
+        <h2>Meal Coupon Receipt Generator</h2>
+        <p>Fill in the details below to generate and print a receipt or get a digital copy.</p>
+
+        <form id="input-form">
+            <div class="form-group">
+                <label for="school-name">School Name:</label>
+                <input type="text" id="school-name" required>
+            </div>
+            <div class="form-group">
+                <label for="mobile-no">Mobile Number:</label>
+                <input type="tel" id="mobile-no" required>
+            </div>
+            <div class="form-group">
+                <label for="amount-received">Amount Received (INR):</label>
+                <input type="number" id="amount-received" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="student-count">Number of Students:</label>
+                <input type="number" id="student-count" min="0" value="0">
+            </div>
+            <div class="form-group">
+                <label for="free-meals">Number of Complimentary Meals:</label>
+                <input type="number" id="free-meals" min="0" value="0">
+            </div>
+
+            <div class="button-group">
+                <button type="submit" id="generate-print-btn">Generate & Print</button>
+                <button type="button" id="generate-image-btn">Generate Receipt Image</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="receipt-template" style="position: absolute; left: -9999px; top: -9999px;">
+        <h2>Sishu Mangal Parsat</h2>
+        <h3>Golden Jubilee Receipt</h3>
+        <div class="divider"></div>
+        <div class="receipt-info">
+            <p><strong>Date:</strong> <span id="receipt-date"></span></p>
+            <p><strong>Received From:</strong> <span class="receipt-data" data-field="school-name"></span></p>
+            <p><strong>Mobile No:</strong> <span class="receipt-data" data-field="mobile-no"></span></p>
+            <div class="divider"></div>
+            <p><strong>Amount:</strong> <span class="receipt-data" data-field="amount-received"></span> INR</p>
+            <p><strong>Students:</strong> <span class="receipt-data" data-field="student-count"></span></p>
+            <p><strong>Complimentary Meals:</strong> <span class="receipt-data" data-field="free-meals"></span></p>
+            <p><strong>Total Meals:</strong> <span id="total-meals"></span></p>
+        </div>
+        <div class="divider"></div>
+        <p style="text-align: center; font-style: italic;">Thank you for your support!</p>
+    </div>
+
+    <div id="generated-image-display" class="no-print">
+        <h3>Generated Receipt Image:</h3>
+        <img id="receipt-image" src="" alt="Generated Meal Receipt">
+        <p id="copy-instructions">Right-click (or long-press on mobile) the image above to copy it and paste into WhatsApp.</p>
+    </div>
+    
+    <script>
+        const formInputs = {
+            'school-name': document.getElementById('school-name'),
+            'mobile-no': document.getElementById('mobile-no'),
+            'amount-received': document.getElementById('amount-received'),
+            'student-count': document.getElementById('student-count'),
+            'free-meals': document.getElementById('free-meals')
+        };
+
+        const receiptTemplate = document.getElementById('receipt-template');
+        const generatedImageDisplay = document.getElementById('generated-image-display');
+        const receiptImageElement = document.getElementById('receipt-image');
+        const receiptDateElement = document.getElementById('receipt-date');
+        const totalMealsElement = document.getElementById('total-meals');
+
+        function updateReceiptTemplate() {
+            for (const field in formInputs) {
+                const elements = receiptTemplate.querySelectorAll(`.receipt-data[data-field="${field}"]`);
+                elements.forEach(el => {
+                    el.textContent = formInputs[field].value;
+                });
+            }
+            const now = new Date();
+            receiptDateElement.textContent = now.toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            const totalMeals = parseInt(formInputs['student-count'].value) + parseInt(formInputs['free-meals'].value);
+            totalMealsElement.textContent = totalMeals;
+        }
+
+        document.getElementById('generate-print-btn').addEventListener('click', function(event) {
+            event.preventDefault();
+            if (document.getElementById('input-form').checkValidity()) {
+                updateReceiptTemplate();
+                receiptTemplate.style.position = 'static';
+                receiptTemplate.style.left = 'auto';
+                receiptTemplate.style.top = 'auto';
+                window.print();
+                receiptTemplate.style.position = 'absolute';
+                receiptTemplate.style.left = '-9999px';
+                receiptTemplate.style.top = '-9999px';
+                generatedImageDisplay.style.display = 'none';
+            } else {
+                alert('Please fill out all required fields.');
+            }
+        });
+
+        document.getElementById('generate-image-btn').addEventListener('click', function(event) {
+            event.preventDefault();
+            if (document.getElementById('input-form').checkValidity()) {
+                updateReceiptTemplate();
+                receiptTemplate.style.position = 'static';
+                receiptTemplate.style.left = 'auto';
+                receiptTemplate.style.top = 'auto';
+                
+                setTimeout(() => {
+                    html2canvas(receiptTemplate, { 
+                        scale: 3,
+                        backgroundColor: '#fff'
+                    }).then(canvas => {
+                        const imageData = canvas.toDataURL('image/png');
+                        receiptImageElement.src = imageData;
+                        generatedImageDisplay.style.display = 'block';
+                        
+                        receiptTemplate.style.position = 'absolute';
+                        receiptTemplate.style.left = '-9999px';
+                        receiptTemplate.style.top = '-9999px';
+                    });
+                }, 50); 
+            } else {
+                alert('Please fill out all required fields.');
+            }
+        });
+    </script>
+</body>
+</html>
