@@ -187,12 +187,12 @@
 
         <form id="input-form">
             <div class="form-group">
-                <label for="payer-name">Payer Name:</label>
-                <input type="text" id="payer-name" required>
+                <label for="school-name">School Name:</label>
+                <input type="text" id="school-name" required>
             </div>
             <div class="form-group">
-                <label for="school-name">School Name:</label>
-                <input type="text" id="school-name">
+                <label for="payer-name">Payer Name:</label>
+                <input type="text" id="payer-name">
             </div>
             <div class="form-group">
                 <label for="mobile-no">Mobile Number:</label>
@@ -225,8 +225,8 @@
         <div class="divider"></div>
         <div class="receipt-info">
             <p><strong>Date:</strong> <span id="receipt-date"></span></p>
-            <p><strong>Payer Name:</strong> <span class="receipt-data" data-field="payer-name"></span></p>
             <p><strong>School Name:</strong> <span class="receipt-data" data-field="school-name"></span></p>
+            <p><strong>Payer Name:</strong> <span class="receipt-data" data-field="payer-name"></span></p>
             <p><strong>Mobile No:</strong> <span class="receipt-data" data-field="mobile-no"></span></p>
             <div class="divider"></div>
             <p><strong>Amount:</strong> <span class="receipt-data" data-field="amount-received"></span> INR</p>
@@ -235,7 +235,7 @@
             <p><strong>Total Meals:</strong> <span id="total-meals"></span></p>
         </div>
         <div class="divider"></div>
-        <p style="text-align: center; font-style: italic;">Thank you for your support!</p>
+        <p class="receipt-footer-message">Have a good day!</p>
     </div>
 
     <div id="generated-image-display" class="no-print">
@@ -246,8 +246,8 @@
     
     <script>
         const formInputs = {
-            'payer-name': document.getElementById('payer-name'),
             'school-name': document.getElementById('school-name'),
+            'payer-name': document.getElementById('payer-name'),
             'mobile-no': document.getElementById('mobile-no'),
             'amount-received': document.getElementById('amount-received'),
             'student-count': document.getElementById('student-count'),
