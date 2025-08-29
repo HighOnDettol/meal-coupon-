@@ -203,8 +203,8 @@
                 <input type="number" id="amount-received" min="0" required>
             </div>
             <div class="form-group">
-                <label for="student-count">Number of Students:</label>
-                <input type="number" id="student-count" min="0" value="0">
+                <label for="delegate-count">Number of Delegates:</label>
+                <input type="number" id="delegate-count" min="0" value="0">
             </div>
             <div class="form-group">
                 <label for="free-meals">Number of Complimentary Meals:</label>
@@ -230,7 +230,7 @@
             <p><strong>Mobile No:</strong> <span class="receipt-data" data-field="mobile-no"></span></p>
             <div class="divider"></div>
             <p><strong>Amount:</strong> <span class="receipt-data" data-field="amount-received"></span> INR</p>
-            <p><strong>Students:</strong> <span class="receipt-data" data-field="student-count"></span></p>
+            <p><strong>Delegates:</strong> <span class="receipt-data" data-field="delegate-count"></span></p>
             <p><strong>Complimentary Meals:</strong> <span class="receipt-data" data-field="free-meals"></span></p>
             <p><strong>Total Meals:</strong> <span id="total-meals"></span></p>
         </div>
@@ -250,7 +250,7 @@
             'payer-name': document.getElementById('payer-name'),
             'mobile-no': document.getElementById('mobile-no'),
             'amount-received': document.getElementById('amount-received'),
-            'student-count': document.getElementById('student-count'),
+            'delegate-count': document.getElementById('delegate-count'), // Changed from student-count
             'free-meals': document.getElementById('free-meals')
         };
 
@@ -274,7 +274,7 @@
                 day: 'numeric'
             });
 
-            const totalMeals = parseInt(formInputs['student-count'].value) + parseInt(formInputs['free-meals'].value);
+            const totalMeals = parseInt(formInputs['delegate-count'].value) + parseInt(formInputs['free-meals'].value); // Changed from student-count
             totalMealsElement.textContent = totalMeals;
         }
 
